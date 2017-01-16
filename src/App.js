@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
+import logo from './logo.svg';
 import './App.css';
 import Infinite from 'react-infinite';
-import 'whatwg-fetch'
+import 'whatwg-fetch';
 import Dataset  from 'impagination';
+
+const ITEM_HEIGHT = 250;
+const HEADER_HEIGHT = 190;
 
 class App extends Component {
   static state = {
@@ -43,8 +46,7 @@ class App extends Component {
   }
 
   setCurrentReadOffset = (event) => {
-    let itemHeight = 250;
-    let currentItemIndex = Math.ceil(window.scrollY / itemHeight);
+    let currentItemIndex = Math.ceil((window.scrollY - HEADER_HEIGHT) / ITEM_HEIGHT);
 
     this.state.dataset.setReadOffset(currentItemIndex);
   }
@@ -52,6 +54,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <div className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h2>Impagination</h2>
+        </div>
         <Infinite containerHeight={400} elementHeight={250} handleScroll={this.setCurrentReadOffset} useWindowAsScrollContainer>
           {this.state.datasetState.map(record => {
             if(record.isPending && !record.isSettled) {
